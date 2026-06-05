@@ -1,0 +1,42 @@
+[project]
+name = "pagekey-hex"
+dynamic = ["version"]
+description = "Orchestration engine for transparent computing."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["pyyaml", "requests"]
+
+[project.optional-dependencies]
+ui = ["fastapi", "uvicorn"]
+
+[project.scripts]
+hex = "hex.main:main"
+
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hex"]
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.0"
+
+[dependency-groups]
+dev = ["pyinstaller", "pytest", "pytest-cov"]
+
+[tool.hatch.build.hooks.version]
+path = "src/hex/_version.py"
+template = '''
+# Copyright 2026 PageKey Solutions, LLC
+
+version = "{version}"
+
+'''
+
+[tool.pytest.ini_options]
+addopts = "--cov=src/hex --cov-report=term-missing"
+testpaths = ["tests"]

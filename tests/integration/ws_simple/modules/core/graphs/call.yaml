@@ -1,0 +1,10 @@
+inputs: []
+outputs: {}
+nodes:
+  call_subgraph:
+    provider: core.call_subgraph:run
+    inputs:
+      graph_id: core.main
+      graph_inputs: '{"name": "Fella"}'
+      workspace: 'tests/integration/ws_simple'
+    outputs: []

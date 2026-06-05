@@ -1,0 +1,13 @@
+inputs: []
+outputs: {}
+nodes:
+  name:
+    provider: core.cli_user_input:run
+    inputs:
+      prompt: Enter your name
+    outputs: [user_input]
+  print_name:
+    provider: core.echo:run
+    inputs:
+      message: name.user_input
+    outputs: []

@@ -1,0 +1,7 @@
+build/
+__pycache__
+*.pyc
+ui_static
+.coverage
+hex.spec
+results/
