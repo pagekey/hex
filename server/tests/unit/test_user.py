@@ -39,3 +39,39 @@ def test_verify_password():
 
     # Act, Assert.
     assert user_manager.verify_password(password, password_hash)
+
+
+def test_authenticate_no_user_found():
+    # Arrange.
+    storage_manager = MagicMock()
+    storage_manager.load.return_value = None
+    user_manager = UserManager(storage_manager)
+
+    # Act, Assert.
+    assert not user_manager.authenticate("username", "pass123")
+
+
+def test_authenticate_wrong_password():
+    # Arrange.
+    storage_manager = MagicMock()
+    storage_manager.load.return_value = {
+        "id": "steve",
+        "password_hash": "abcdef:abcdef",
+    }
+    user_manager = UserManager(storage_manager)
+
+    # Act, Assert.
+    assert not user_manager.authenticate("username", "pass123")
+
+
+def test_authenticate_correct_password():
+    # Arrange.
+    storage_manager = MagicMock()
+    user_manager = UserManager(storage_manager)
+    storage_manager.load.return_value = {
+        "id": "steve",
+        "password_hash": user_manager.hash_password("mypass"),
+    }
+
+    # Act, Assert.
+    assert user_manager.authenticate("username", "mypass")

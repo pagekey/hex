@@ -46,3 +46,10 @@ class UserManager:
         )
 
         return actual_digest == expected_digest
+
+    def authenticate(self, username: str, password: str) -> bool:
+        """Check a username and password combo."""
+        user = self._storage_manager.load("users", username)
+        if not user:
+            return None
+        return self.verify_password(password, user["password_hash"])
