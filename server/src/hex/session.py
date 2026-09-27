@@ -42,3 +42,11 @@ class SessionManager:
 
     def get_current_timestamp(self) -> str:
         return datetime.now(timezone.utc).isoformat()
+
+    def get_session_username(self, session_id: str) -> str | None:
+        session = self._storage_manager.load("sessions", session_id)
+
+        if session is None:
+            return None
+
+        return session["username"]

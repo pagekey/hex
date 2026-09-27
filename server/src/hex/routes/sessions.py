@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Cookie
 from fastapi.responses import JSONResponse
 from hex.storage import StorageManager
 from hex.user import UserManager
@@ -10,7 +10,9 @@ from pydantic import BaseModel
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
 
-storage_manager = StorageManager(Path())  # TODO figure out how to choose path
+storage_manager = StorageManager(
+    Path("hexstorage")
+)  # TODO figure out how to choose path
 user_manager = UserManager(storage_manager)
 session_manager = SessionManager(storage_manager, user_manager)
 
@@ -51,3 +53,19 @@ async def create_session(request: CreateSessionRequest):
         return JSONResponse(
             status_code=401, content={"message": "Invalid username or password"}
         )
+
+
+@router.get("/check")
+async def check_session(session_id: str | None = Cookie(default=None)):
+    if session_id is None:
+        return {"authenticated": False}
+
+    username = session_manager.get_session_username(session_id)
+
+    if username is None:
+        return {"authenticated": False}
+
+    return {
+        "authenticated": True,
+        "username": username,
+    }
