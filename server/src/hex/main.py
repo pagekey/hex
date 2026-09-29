@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from hex.routes.sessions import router as sessions_router
+from hex.routes.workflows import router as workflows_router
 
 app = FastAPI()
 
@@ -14,6 +15,7 @@ app.add_middleware(
 )
 
 app.include_router(sessions_router)
+app.include_router(workflows_router)
 
 
 @app.get("/")

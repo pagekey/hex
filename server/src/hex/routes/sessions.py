@@ -1,20 +1,15 @@
-from pathlib import Path
-
 from fastapi import APIRouter, Cookie
 from fastapi.responses import JSONResponse
-from hex.storage import StorageManager
-from hex.user import UserManager
-from hex.session import SessionManager, InvalidLoginException
 from pydantic import BaseModel
 
+from hex.globals import (
+    session_manager,
+    storage_manager,
+    user_manager,
+)
+from hex.session import InvalidLoginException
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
-
-storage_manager = StorageManager(
-    Path("hexstorage")
-)  # TODO figure out how to choose path
-user_manager = UserManager(storage_manager)
-session_manager = SessionManager(storage_manager, user_manager)
 
 
 @router.get("")
