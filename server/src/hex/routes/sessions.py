@@ -46,7 +46,7 @@ async def create_session(request: CreateSessionRequest):
             value=session_id,
             httponly=True,
             samesite="lax",
-            # secure=True,  # TODO uncomment when deploying
+            secure=False,  # TODO set to True in prod
         )
         return response
     except InvalidLoginException:
@@ -69,3 +69,16 @@ async def check_session(session_id: str | None = Cookie(default=None)):
         "authenticated": True,
         "username": username,
     }
+
+
+@router.delete("")
+def delete_current_session():
+    response = JSONResponse(status_code=200, content={"message": "Session deleted"})
+    response.set_cookie(
+        key="session_id",
+        value="",
+        httponly=True,
+        samesite="lax",
+        secure=False,  # TODO set to True in prod
+    )
+    return response

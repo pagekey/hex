@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import { setCurrentServer } from "@/lib/state";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +29,10 @@ export default function Login() {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
             });
             if (request.status == 201) {
+                setCurrentServer(server);
                 navigate("/dashboard");
             } else {
                 const response = await request.json();
