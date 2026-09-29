@@ -36,7 +36,7 @@ class CreateSessionRequest(BaseModel):
     password: str
 
 
-@router.post("/new")
+@router.post("")
 async def create_session(request: CreateSessionRequest):
     try:
         session_id = session_manager.create_session(request.username, request.password)
