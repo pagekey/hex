@@ -1,3 +1,4 @@
+import AddWorkflowForm from "@/components/AddWorkflowForm";
 import { Button } from "@/components/ui/button";
 import { checkLogin } from "@/lib/check";
 import { getCurrentServer } from "@/lib/state";
@@ -35,6 +36,7 @@ export default function Dashboard() {
         <div>
             Dashboard!
             <Button onClick={handleLogout}>Logout</Button>
+            <AddWorkflowForm />
         </div>
     )
 }
