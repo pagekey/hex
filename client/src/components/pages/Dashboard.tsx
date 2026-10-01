@@ -1,5 +1,6 @@
 import AddWorkflowForm from "@/components/AddWorkflowForm";
 import { Button } from "@/components/ui/button";
+import WorkflowsList from "@/components/WorkflowsList";
 import { checkLogin } from "@/lib/check";
 import { getCurrentServer } from "@/lib/state";
 import { useEffect } from "react";
@@ -37,6 +38,7 @@ export default function Dashboard() {
             Dashboard!
             <Button onClick={handleLogout}>Logout</Button>
             <AddWorkflowForm />
+            <WorkflowsList />
         </div>
     )
 }
