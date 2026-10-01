@@ -14,3 +14,5 @@ curl -X POST -H "Cookie: session_id=$SESSION_ID" http://localhost:8000/workflows
 # List workflows
 curl -H "Cookie: session_id=$SESSION_ID" http://localhost:8000/workflows -H "Content-Type: application/json"
 
+# Run a workflow
+curl -X POST -H "Cookie: session_id=$SESSION_ID" http://localhost:8000/workflows/run -H "Content-Type: application/json" -d '{"id":"my-workflow"}'
