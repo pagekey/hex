@@ -1,6 +1,6 @@
 export const checkLogin = async (server: string) => {
     try {
-        const request = await fetch(`${server}/api/sessions/check`, {
+        const request = await fetch(`${server}/sessions/check`, {
             credentials: "include",  // Include cookies.
             headers: {
                 "Content-Type": "application/json",

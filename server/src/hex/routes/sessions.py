@@ -9,7 +9,7 @@ from hex.globals import (
 )
 from hex.session import InvalidLoginException
 
-router = APIRouter(prefix="/api/sessions", tags=["sessions"])
+router = APIRouter(prefix="/sessions", tags=["sessions"])
 
 
 @router.get("")

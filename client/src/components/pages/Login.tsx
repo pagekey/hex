@@ -20,7 +20,7 @@ export default function Login() {
         e.preventDefault();
         setLoading(false);
         try {
-            const request = await fetch(`${server}/api/sessions`, {
+            const request = await fetch(`${server}/sessions`, {
                 method: "POST",
                 body: JSON.stringify({
                     username,

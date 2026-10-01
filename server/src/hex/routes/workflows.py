@@ -10,7 +10,7 @@ from hex.globals import (
 )
 
 
-router = APIRouter(prefix="/api/workflows", tags=["sessions"])
+router = APIRouter(prefix="/workflows", tags=["sessions"])
 
 
 def _get_login_error(session_id: str) -> JSONResponse | None:

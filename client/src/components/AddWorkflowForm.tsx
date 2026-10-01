@@ -42,7 +42,7 @@ export default function AddWorkflowForm() {
         setLoading(false);
         try {
             const server = getCurrentServer();
-            const request = await fetch(`${server}/api/workflows`, {
+            const request = await fetch(`${server}/workflows`, {
                 method: "POST",
                 body: JSON.stringify({
                     id,
