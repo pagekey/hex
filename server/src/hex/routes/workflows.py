@@ -11,11 +11,6 @@ from hex.globals import (
 router = APIRouter(prefix="/workflows", tags=["sessions"])
 
 
-@router.get("")
-async def home():
-    return "Hello from workflows"
-
-
 class Operation(BaseModel):
     name: str
     command: str
@@ -57,3 +52,9 @@ async def create_workflow(
     return JSONResponse(
         status_code=200, content={"message": f"Created workflow {request.id}"}
     )
+
+
+@router.get("")
+async def list_workflows():
+    workflows = storage_manager.load_many("workflows")
+    return JSONResponse(status_code=200, content=workflows)

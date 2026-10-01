@@ -22,3 +22,18 @@ class StorageManager:
             return json.loads(target_path.read_text())
         else:
             return None
+
+    def load_many(self, asset_type: str, limit=100, page=0) -> list[dict]:
+        """Load many of the same asset type."""
+        target_path = self._base_path / asset_type
+        results = []
+        index = page * limit
+        for i, f in enumerate(target_path.iterdir()):
+            if i < index:
+                continue
+            if f.name.endswith(".json"):
+                results.append(self.load(asset_type, f.name.replace(".json", "")))
+            if len(results) >= limit:
+                break
+
+        return results
