@@ -12,8 +12,11 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hex"]
+artifacts = ["src/hex/static/**/*"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/hex", "tests"]
+artifacts = ["src/hex/static/**/*"]
 
 [dependency-groups]
-dev = [
-    "pytest>=9.1.1",
-]
+dev = ["pytest>=9.1.1"]

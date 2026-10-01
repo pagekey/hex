@@ -6,6 +6,9 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   base: "/ui",
+  build: {
+    outDir: path.resolve(__dirname, "../server/src/hex/static"),
+  },
   plugins: [
     react(),
     tailwindcss(),

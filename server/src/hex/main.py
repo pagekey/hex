@@ -35,7 +35,7 @@ def index():
 
 
 def get_static_dir() -> Path:
-    return Path("../client/dist")
+    return Path(__file__).parent / "static"
 
 
 class SPAStaticFiles(StaticFiles):
