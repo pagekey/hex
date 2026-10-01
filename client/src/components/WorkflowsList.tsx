@@ -23,7 +23,7 @@ export default function WorkflowsList() {
         try {
             const server = getCurrentServer();
 
-            const request = await fetch(`${server}/workflows`, {
+            const request = await fetch(`${server}/api/workflows`, {
                 credentials: "include",
             });
 
@@ -48,7 +48,7 @@ export default function WorkflowsList() {
             const server = getCurrentServer();
 
             const request = await fetch(
-                `${server}/workflows/run`,
+                `${server}/api/workflows/run`,
                 {
                     method: "POST",
                     credentials: "include",

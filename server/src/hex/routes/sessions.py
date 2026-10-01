@@ -9,7 +9,7 @@ from hex.globals import (
 )
 from hex.session import InvalidLoginException
 
-router = APIRouter(prefix="/sessions", tags=["sessions"])
+router = APIRouter(prefix="/api/sessions", tags=["sessions"])
 
 
 @router.get("")
@@ -42,6 +42,7 @@ async def create_session(request: CreateSessionRequest):
             httponly=True,
             samesite="lax",
             secure=False,  # TODO set to True in prod
+            path="/",
         )
         return response
     except InvalidLoginException:
@@ -75,5 +76,6 @@ def delete_current_session():
         httponly=True,
         samesite="lax",
         secure=False,  # TODO set to True in prod
+        path="/",
     )
     return response

@@ -23,7 +23,7 @@ export default function Dashboard() {
 
         if (!server) return;
 
-        const request = await fetch(`${server}/sessions`, {
+        const request = await fetch(`${server}/api/sessions`, {
             method: "DELETE",
         });
 
