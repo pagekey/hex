@@ -23,3 +23,5 @@ jobs:
             - name: Update version
               run: |
                 echo "Releasing $VERSION"
+                sed -i 's/^version = "/version = "'$VERSION'"/' server/pyproject.toml
+                cat server/pyproject.toml
