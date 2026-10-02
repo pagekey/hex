@@ -12,6 +12,14 @@ jobs:
               with:
                 fetch-depth: 0
             - run: npm init -y
-            - run: npx semantic-release
+            - name: Calculate version
+              run: |
+                npx semantic-release --dry-run > release.txt
+                cat release.txt
+                VERSION=$(grep -oE 'next release version is [0-9]+\.[0-9]+\.[0-9]+' release.txt | awk '{print $5}')
+                echo "VERSION=$VERSION" >> "$GITHUB_ENV"
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Update version
+              run: |
+                echo "Releasing $VERSION"
