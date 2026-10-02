@@ -25,3 +25,5 @@ jobs:
                 echo "Releasing $VERSION"
                 sed -i 's/^version = ".*"/version = "'$VERSION'"/' server/pyproject.toml
                 cat server/pyproject.toml
+                sed -i 's/^"version": ".*"/"version": "'$VERSION'"/' client/package.json
+                cat client/package.json
