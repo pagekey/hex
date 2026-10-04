@@ -75,8 +75,10 @@ jobs:
               git tag "v$VERSION"
               git push origin main
               git push origin "v$VERSION"
+          
+          - uses: astral-sh/setup-uv@v7
           - name: Publish Python package
-            working-directory: server
             run: |
+              cd server
               uv build
               uv publish
