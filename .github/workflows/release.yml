@@ -8,58 +8,75 @@ permissions:
   contents: write
 
 jobs:
-    release:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                fetch-depth: 0
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v7
+      - run: |
+          cd server
+          uv sync --group dev
+          uv run pytest
 
-            - run: npm init -y
+  release:
+      needs: test
+      runs-on: ubuntu-latest
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      steps:
+          - uses: actions/checkout@v4
+            with:
+              fetch-depth: 0
 
-            - name: Calculate version
-              run: |
-                npx semantic-release --dry-run > release.txt
-                cat release.txt
-                VERSION=$(grep -oE 'next release version is [0-9]+\.[0-9]+\.[0-9]+' release.txt | awk '{print $5}')
-                if [ -z "$VERSION" ]; then
-                  echo "No release needed."
-                  echo "RELEASE=false" >> "$GITHUB_ENV"
-                  exit 0
-                fi
-                  
-                echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-                echo "RELEASE=true" >> "$GITHUB_ENV"
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          - run: npm init -y
 
-            - name: Update version
-              if: env.RELEASE == 'true'
-              run: |
-                echo "Releasing $VERSION"
-                sed -i 's/^version = ".*"/version = "'$VERSION'"/' server/pyproject.toml
-                jq --arg version "$VERSION" \
-                  '.version = $version' \
-                  client/package.json > package.json.tmp
-                mv package.json.tmp client/package.json
-
-                echo "Server:"
-                grep '^version' server/pyproject.toml
-
-                echo "Client:"
-                jq '.version' client/package.json
-
-            - name: Commit version
-              if: env.RELEASE == 'true'
-              run: |
-                git config user.name "github-actions[bot]"
-                git config user.email "github-actions[bot]@users.noreply.github.com"
-                git add server/pyproject.toml client/package.json
-                git commit -m "chore(release): $VERSION"
+          - name: Calculate version
+            run: |
+              npx semantic-release --dry-run > release.txt
+              cat release.txt
+              VERSION=$(grep -oE 'next release version is [0-9]+\.[0-9]+\.[0-9]+' release.txt | awk '{print $5}')
+              if [ -z "$VERSION" ]; then
+                echo "No release needed."
+                echo "RELEASE=false" >> "$GITHUB_ENV"
+                exit 0
+              fi
                 
-            - name: Create tag
-              if: env.RELEASE == 'true'
-              run: |
-                git tag "v$VERSION"
-                git push origin main
-                git push origin "v$VERSION"
+              echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+              echo "RELEASE=true" >> "$GITHUB_ENV"
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          - name: Update version
+            if: env.RELEASE == 'true'
+            run: |
+              echo "Releasing $VERSION"
+              sed -i 's/^version = ".*"/version = "'$VERSION'"/' server/pyproject.toml
+              jq --arg version "$VERSION" \
+                '.version = $version' \
+                client/package.json > package.json.tmp
+              mv package.json.tmp client/package.json
+
+              echo "Server:"
+              grep '^version' server/pyproject.toml
+
+              echo "Client:"
+              jq '.version' client/package.json
+
+          - name: Commit version
+            if: env.RELEASE == 'true'
+            run: |
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+              git add server/pyproject.toml client/package.json
+              git commit -m "chore(release): $VERSION"
+              
+          - name: Create tag
+            if: env.RELEASE == 'true'
+            run: |
+              git tag "v$VERSION"
+              git push origin main
+              git push origin "v$VERSION"
+          - name: Publish Python package
+            working-directory: server
+            run: |
+              uv build
+              uv publish
