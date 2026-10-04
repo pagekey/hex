@@ -94,7 +94,9 @@ jobs:
               git push origin "v$VERSION"
           
           - uses: astral-sh/setup-uv@v7
+            if: env.RELEASE == 'true'
           - name: Publish Python package
+            if: env.RELEASE == 'true'
             run: |
               cd server
               uv build
