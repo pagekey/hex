@@ -1,0 +1,21 @@
+name: Publish
+
+on:
+    push:
+        tags:
+            - "v*"
+
+permissions:
+    contents: read
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: astral-sh/setup-uv@v6
+            - name: Publish Python package
+              working-directory: server
+              run: |
+                uv build
+                uv publish
