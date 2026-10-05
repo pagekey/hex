@@ -14,7 +14,7 @@ from hex.routes.workflows import create_router as create_workflows_router
 
 app = FastAPI()
 
-hex_app = create_app()
+hex_app = create_app("hexstorage")
 
 app.add_middleware(
     CORSMiddleware,
