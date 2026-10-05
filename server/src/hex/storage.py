@@ -28,7 +28,7 @@ class StorageManager:
         target_path = self._base_path / asset_type
         results = []
         index = page * limit
-        for i, f in enumerate(target_path.iterdir()):
+        for i, f in enumerate(sorted(target_path.iterdir())):
             if i < index:
                 continue
             if f.name.endswith(".json"):
