@@ -13,7 +13,7 @@ def create_router(
     storage_manager: StorageManager,
     user_manager: UserManager,
 ) -> APIRouter:
-    router = APIRouter(prefix="/api/workflows", tags=["sessions"])
+    router = APIRouter(prefix="/api/workflows", tags=["workflows"])
 
     def _get_login_error(session_id: str) -> JSONResponse | None:
         if session_id is None:
@@ -66,12 +66,12 @@ def create_router(
         if login_error is not None:
             return login_error
         workflow_dict = storage_manager.load("workflows", request.id)
-        workflow = Workflow(**workflow_dict)
-        # TODO make sure the user owns it, blah blah blah
-        if not workflow:
+        if workflow_dict is None:
             return JSONResponse(
                 status_code=404, content={"message": f"Workflow {request.id} not found"}
             )
+        workflow = Workflow(**workflow_dict)
+        # TODO make sure the user owns it, blah blah blah
         result = execute_workflow(workflow)
         return JSONResponse(status_code=200, content={"execution": result.model_dump()})
 
