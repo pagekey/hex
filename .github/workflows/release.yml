@@ -13,6 +13,7 @@ jobs:
       - uses: astral-sh/setup-uv@v7
       - run: |
           cd server
+          mkdir -p src/hex/static
           uv sync --group dev
           uv run pytest
 

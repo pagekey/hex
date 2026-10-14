@@ -60,3 +60,34 @@ def test_get_current_timestamp():
 
     # Assert.
     assert datetime.fromisoformat(timestamp)
+
+
+def test_get_session_username_session_not_found():
+    # Arrange.
+    storage_manager = MagicMock()
+    storage_manager.load.return_value = None
+    session_manager = SessionManager(storage_manager, MagicMock())
+
+    # Act.
+    username = session_manager.get_session_username("does-not-exist")
+
+    # Assert.
+    assert username is None
+    storage_manager.load.assert_called_once_with("sessions", "does-not-exist")
+
+
+def test_get_session_username():
+    # Arrange.
+    storage_manager = MagicMock()
+    storage_manager.load.return_value = {
+        "id": "abc",
+        "username": "me",
+    }
+    session_manager = SessionManager(storage_manager, MagicMock())
+
+    # Act.
+    username = session_manager.get_session_username("abc")
+
+    # Assert.
+    assert username == "me"
+    storage_manager.load.assert_called_once_with("sessions", "abc")

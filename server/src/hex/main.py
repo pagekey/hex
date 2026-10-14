@@ -8,10 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from hex.routes.sessions import router as sessions_router
-from hex.routes.workflows import router as workflows_router
+from hex.app import create_app
+from hex.routes.sessions import create_router as create_sessions_router
+from hex.routes.workflows import create_router as create_workflows_router
 
 app = FastAPI()
+
+hex_app = create_app("hexstorage")
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,8 +28,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(sessions_router)
-app.include_router(workflows_router)
+app.include_router(
+    create_sessions_router(hex_app.sessions, hex_app.storage, hex_app.users)
+)
+app.include_router(
+    create_workflows_router(hex_app.sessions, hex_app.storage, hex_app.users)
+)
 
 
 @app.get("/")
